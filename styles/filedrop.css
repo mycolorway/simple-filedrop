@@ -1,0 +1,19 @@
+.simple-filedrop .filedrop-dropzone {
+  position: absolute;
+  border: 3px dashed #9b9b9b;
+  border-radius: 10px;
+  margin: 10px;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: white;
+}
+.simple-filedrop .filedrop-dropzone .filedrop-hints {
+  position: absolute;
+  width: 100%;
+  bottom: 50%;
+  text-align: center;
+  font-size: 200%;
+  color: gray;
+}
