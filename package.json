@@ -1,0 +1,26 @@
+{
+  "name": "simple-filedrop",
+  "description": "The best project ever.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/ichord/simple-filedrop",
+  "author": {
+    "name": "ichord",
+    "email": "chord.luo@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ichord/simple-filedrop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ichord/simple-filedrop/issues"
+  },
+  "devDependencies": {
+    "grunt": "0.x",
+    "grunt-contrib-watch": "0.x",
+    "grunt-contrib-coffee": "0.x",
+    "grunt-contrib-sass": "0.x",
+    "grunt-contrib-jasmine": "0.x",
+    "grunt-umd": "2.x"
+  },
+  "keywords": []
+}
