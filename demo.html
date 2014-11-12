@@ -1,17 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Simple filedrop Demo</title>
-    <meta charset="utf-8" />
-</head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Simditor</title>
+    <meta name="viewport" content="width=device-width">
 
+    <link media="all" rel="stylesheet" type="text/css" href="styles/filedrop.css" />
+
+    <style type="text/css">
+        .wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            color: rgb(113, 113, 113);
+        }
+        .dropzone {
+            min-height: 200px;
+            width: 100%;
+            font-size: 14px;
+        }
+        header {
+            margin: 50px 0;
+            text-align: center;
+        }
+        section {
+            margin: 30px 0;
+        }
+    </style>
+</head>
 <body>
 
 <div class="wrapper">
+    <header>
+        <h1>Simple Filedrop</h1>
+    </header>
+    <section>
+        <h3>Drop file in any areas with hints</h3>
+        <textarea class="dropzone hints" autofocus>
+
+            Drop files here.
+
+        </textarea>
+        <h3>Drop without `hints`</h3>
+        <textarea class="dropzone nohints"></textarea>
+    </section>
+
+    <script type="text/javascript" src="vendor/bower/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="vendor/bower/simple-module/lib/module.js"></script>
+    <script type="text/javascript" src="lib/filedrop.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var createDropzone = function(el, hints) {
+                var el = $(el);
+                simple.filedrop({
+                    el: el,
+                    types: ['image/png', 'image/jpeg', 'image/gif'],
+                    hints: hints
+                }).on("fileDrop", function(e, files){
+                    var text = "";
+                    for (var i = files.length - 1; i >= 0; i--) {
+                        file = files[i];
+                        text += "\tname: '" + file.name + "', type: " + file.type + "\n";
+                    };
+                    el.focus().val("\tDroped files:\n" + text);
+                });
+            }
+            createDropzone(".hints", "Drop files here to show info.");
+            createDropzone(".nohints");
+
+            simple.filedrop({el: '.input'});
+        });
+    </script>
+
 </div>
 
 </body>
-
 </html>
-
-
