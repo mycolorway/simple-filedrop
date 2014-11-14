@@ -15,7 +15,7 @@
             color: rgb(113, 113, 113);
         }
         .dropzone {
-            min-height: 200px;
+            min-height: 300px;
             width: 100%;
             font-size: 14px;
         }
@@ -35,14 +35,11 @@
         <h1>Simple Filedrop</h1>
     </header>
     <section>
-        <h3>Drop file in any areas with hints</h3>
         <textarea class="dropzone hints" autofocus>
 
             Drop files here.
 
         </textarea>
-        <h3>Drop without `hints`</h3>
-        <textarea class="dropzone nohints"></textarea>
     </section>
 
     <script type="text/javascript" src="vendor/bower/jquery/dist/jquery.min.js"></script>
@@ -57,6 +54,7 @@
                     types: ['image/png', 'image/jpeg', 'image/gif'],
                     hints: hints
                 }).on("fileDrop", function(e, files){
+                    console.log("drop", e);
                     var text = "";
                     for (var i = files.length - 1; i >= 0; i--) {
                         file = files[i];
@@ -66,9 +64,6 @@
                 });
             }
             createDropzone(".hints", "Drop files here to show info.");
-            createDropzone(".nohints");
-
-            simple.filedrop({el: '.input'});
         });
     </script>
 

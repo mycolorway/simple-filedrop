@@ -13,11 +13,18 @@ class Filedrop extends SimpleModule
   opts:
     el: null
     types: []
-    hints: null
+    hints: "Drop file here"
 
   _init: ->
     @el = $ @opts.el
     @el.data 'filedrop', @
+
+    @dropzone = $ @_dropzoneTpl
+      .find '.filedrop-hints'
+      .html @opts.hints
+      .end()
+      .hide()
+      .appendTo document.body
 
     $ document
       .on "dragover.filedrop", (e) ->
@@ -25,17 +32,14 @@ class Filedrop extends SimpleModule
         e.preventDefault()
       .on 'drop.filedrop', (e) ->
         e.preventDefault()
-
-    @dropzone = $ @_dropzoneTpl
-    if @opts.hints
-      @dropzone.find '.filedrop-hints'
-        .html @opts.hints
-    else
-      @dropzone.find '.filedrop-dropzone'
-        .removeClass 'filedrop-dropzone'
-    @dropzone.hide().appendTo document.body
-
-    @el.on "dragenter.filedrop", => @showDropzone()
+      .on 'dragenter.filedrop', (e) =>
+        if (@_entered += 1) == 1
+          @showDropzone() 
+          @trigger("fileDropShown", e)
+      .on 'dragleave.filedrop', (e) =>
+        if (@_entered -= 1) <= 0
+          @hideDropzone()
+          @trigger("fileDropHiden", e)
 
     @dropzone.on "dragover", (e) =>
       # From Dropzone.js
@@ -44,26 +48,18 @@ class Filedrop extends SimpleModule
       # Try is required to prevent bug in Internet Explorer 11 (SCRIPT65535 exception)
       try efct = e.originalEvent.dataTransfer.effectAllowed
       e.originalEvent.dataTransfer.dropEffect = if 'move' == efct or 'linkMove' == efct then 'move' else 'copy' 
-      @_stopEvent e
-    .on "dragenter", (e) =>
-      @_stopEvent e
-      @trigger("fileDragenter", e) if (@_entered += 1) == 1
-    .on "dragleave", (e) =>
-      @_stopEvent e
-      if (@_entered -= 1) <= 0
-        @trigger("fileDragleave", e)
-        @hideDropzone()
+      false
     .on "drop", (e) =>
-      @_stopEvent e
       files = []
       for file in e.originalEvent.dataTransfer.files
-        if not @_validFile file
+        unless @opts.types.indexOf(file.type) > -1
           @trigger("fileDropfails", [file, "Wrong types!"])
           @hideDropzone()
           return false
         files.push file
       @trigger "fileDrop", [files, e]
       @hideDropzone()
+      false
 
   showDropzone: ->
     @dropzone
@@ -86,14 +82,6 @@ class Filedrop extends SimpleModule
       .removeData 'filedrop'
     $(document).off '.filedrop'
     @dropzone.remove()
-
-  _validFile: (file) ->
-    @opts.types.indexOf(file.type) > -1
-
-  _stopEvent: (e) ->
-    e.preventDefault()
-    e.stopPropagation()
-    e
 
 filedrop = (opts) ->
   new Filedrop(opts)
