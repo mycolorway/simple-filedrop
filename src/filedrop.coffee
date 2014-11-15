@@ -39,7 +39,7 @@ class Filedrop extends SimpleModule
       .on 'dragleave.filedrop', (e) =>
         if (@_entered -= 1) <= 0
           @hideDropzone()
-          @trigger("fileDropHiden", e)
+          @trigger("fileDropHidden", e)
 
     @dropzone.on "dragover", (e) =>
       # From Dropzone.js
@@ -53,7 +53,7 @@ class Filedrop extends SimpleModule
       files = []
       for file in e.originalEvent.dataTransfer.files
         unless @opts.types.indexOf(file.type) > -1
-          @trigger("fileDropfails", [file, "Wrong types!"])
+          @trigger("fileDropfail", [file, "Wrong types!"])
           @hideDropzone()
           return false
         files.push file
@@ -78,8 +78,7 @@ class Filedrop extends SimpleModule
     @_entered = 0
 
   destroy: ->
-    @el.off '.filedrop'
-      .removeData 'filedrop'
+    @el.removeData 'filedrop'
     $(document).off '.filedrop'
     @dropzone.remove()
 

@@ -1,9 +1,106 @@
 (function() {
   describe('Simple filedrop', function() {
-    return it('should inherit from SimpleModule', function() {
-      var filedrop;
-      filedrop = simple.filedrop();
+    var filedrop;
+    filedrop = null;
+    $('<div id="filedrop" style="height: 100px; width: 100px;"></div>').appendTo('body');
+    beforeEach(function() {
+      return filedrop = simple.filedrop({
+        el: '#filedrop',
+        types: ['image/png']
+      });
+    });
+    afterEach(function() {
+      return filedrop.destroy();
+    });
+    it('should inherit from SimpleModule', function() {
       return expect(filedrop instanceof SimpleModule).toBe(true);
+    });
+    describe('could be destroyed', function() {
+      it('remove filedrop data of el', function() {
+        expect(filedrop.el.data('filedrop')).toBe(filedrop);
+        filedrop.destroy();
+        return expect(filedrop.el.data('filedrop')).toBe(void 0);
+      });
+      it('remove .filedrop events which had been binded with document', function() {
+        var callback;
+        $(document).on('dragenter.filedrop', callback = jasmine.createSpy('callback')).trigger($.Event('dragenter.filedrop'));
+        expect(callback).toHaveBeenCalled();
+        $(document).on('dragenter.filedrop', callback = jasmine.createSpy('callback'));
+        filedrop.destroy();
+        $(document).trigger($.Event('dragenter.filedrop'));
+        return expect(callback).not.toHaveBeenCalled();
+      });
+      return it('remove the dropzone el', function() {
+        expect(filedrop.dropzone.parent().length).not.toBe(0);
+        filedrop.destroy();
+        return expect(filedrop.dropzone.parent().length).toBe(0);
+      });
+    });
+    describe('events', function() {
+      it('fileDropShown', function() {
+        var callback;
+        filedrop.on('fileDropShown', callback = jasmine.createSpy('callback'));
+        $(document).trigger($.Event('dragenter.filedrop'));
+        return expect(callback).toHaveBeenCalled();
+      });
+      it('fileDropHidden', function() {
+        var callback;
+        filedrop.on('fileDropHidden', callback = jasmine.createSpy('callback'));
+        $(document).trigger($.Event('dragleave.filedrop'));
+        return expect(callback).toHaveBeenCalled();
+      });
+      return it('fileDrop', function() {
+        var callback;
+        filedrop.on('fileDrop', callback = jasmine.createSpy('callback'));
+        filedrop.dropzone.trigger($.Event('drop', {
+          originalEvent: {
+            dataTransfer: {
+              files: []
+            }
+          }
+        }));
+        return expect(callback).toHaveBeenCalled();
+      });
+    });
+    return describe('options', function() {
+      it('accpet png', function() {
+        var callback, data;
+        callback = jasmine.createSpy('callback');
+        filedrop.on('fileDropfail', callback);
+        data = {
+          originalEvent: {
+            dataTransfer: {
+              files: [
+                {
+                  name: "An png image",
+                  type: "image/png"
+                }
+              ]
+            }
+          }
+        };
+        filedrop.dropzone.trigger($.Event('drop', data));
+        return expect(callback).not.toHaveBeenCalled();
+      });
+      return it("don't accpet jpeg", function() {
+        var callback, data;
+        callback = jasmine.createSpy('callback');
+        filedrop.on('fileDropfail', callback);
+        data = {
+          originalEvent: {
+            dataTransfer: {
+              files: [
+                {
+                  name: "An jpg image",
+                  type: "image/jpeg"
+                }
+              ]
+            }
+          }
+        };
+        filedrop.dropzone.trigger($.Event('drop', data));
+        return expect(callback).toHaveBeenCalled();
+      });
     });
   });
 
