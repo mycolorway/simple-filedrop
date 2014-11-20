@@ -1,6 +1,8 @@
 simple-filedrop
 =============
 
+[![Build Status](https://travis-ci.org/ichord/simple-filedrop.svg)](https://travis-ci.org/ichord/simple-filedrop)
+
 ### 配置
 
 * `el` 投放区域元素，jQuery 对象，class, id
