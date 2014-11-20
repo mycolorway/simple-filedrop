@@ -1,4 +1,7 @@
 .simple-filedrop {
+  &.hover .filedrop-dropzone {
+    border: 3px solid rgb(155, 155, 155);
+  }
   .filedrop-dropzone {
     position: absolute;
     border: 3px dashed rgb(155, 155, 155);

@@ -27,9 +27,10 @@ class Filedrop extends SimpleModule
       .appendTo document.body
 
     $ document
-      .on "dragover.filedrop", (e) ->
+      .on "dragover.filedrop", (e) =>
         e.originalEvent.dataTransfer.dropEffect = "none"
-        e.preventDefault()
+        @dropzone.removeClass 'hover' if @dropzone.hasClass 'hover'
+        false
       .on 'drop.filedrop', (e) ->
         e.preventDefault()
       .on 'dragenter.filedrop', (e) =>
@@ -48,6 +49,7 @@ class Filedrop extends SimpleModule
       # Try is required to prevent bug in Internet Explorer 11 (SCRIPT65535 exception)
       try efct = e.originalEvent.dataTransfer.effectAllowed
       e.originalEvent.dataTransfer.dropEffect = if 'move' == efct or 'linkMove' == efct then 'move' else 'copy' 
+      @dropzone.addClass "hover" unless @dropzone.hasClass 'hover'
       false
     .on "drop", (e) =>
       files = []
@@ -63,6 +65,7 @@ class Filedrop extends SimpleModule
 
   showDropzone: ->
     @dropzone
+      .removeClass 'hover'
       .css
         zIndex: 9,
         position: 'absolute',
