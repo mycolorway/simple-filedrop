@@ -1,7 +1,7 @@
 simple-filedrop
 =============
 
-[![Build Status](https://travis-ci.org/ichord/simple-filedrop.svg)](https://travis-ci.org/ichord/simple-filedrop)
+[![Circle CI](https://circleci.com/gh/ichord/simple-filedrop/tree/master.png?style=badge)](https://circleci.com/gh/ichord/simple-filedrop/tree/master)
 
 ### 配置
 
