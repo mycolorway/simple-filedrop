@@ -63,7 +63,7 @@ class Filedrop extends SimpleModule
           return false
         files.push file
       @trigger "drop", [files]
-      @hideDropzone()
+      @constructor.hideAllDropzone()
       false
 
   showDropzone: ->
@@ -82,6 +82,11 @@ class Filedrop extends SimpleModule
   hideDropzone: ->
     @dropzone.hide()
     @_entered = 0
+
+  @hideAllDropzone: ->
+    $('.simple-filedrop').each () ->
+      filedrop = $(@).data('filedrop')
+      filedrop.hideDropzone() if filedrop
 
   destroy: ->
     @el.removeData 'filedrop'
