@@ -39,19 +39,19 @@
     describe('events', function() {
       it('fileDropShown', function() {
         var callback;
-        filedrop.on('fileDropShown', callback = jasmine.createSpy('callback'));
+        filedrop.on('dropzoneshow', callback = jasmine.createSpy('callback'));
         $(document).trigger($.Event('dragenter.filedrop'));
         return expect(callback).toHaveBeenCalled();
       });
       it('fileDropHidden', function() {
         var callback;
-        filedrop.on('fileDropHidden', callback = jasmine.createSpy('callback'));
+        filedrop.on('dropzonehide', callback = jasmine.createSpy('callback'));
         $(document).trigger($.Event('dragleave.filedrop'));
         return expect(callback).toHaveBeenCalled();
       });
       return it('fileDrop', function() {
         var callback;
-        filedrop.on('fileDrop', callback = jasmine.createSpy('callback'));
+        filedrop.on('drop', callback = jasmine.createSpy('callback'));
         filedrop.dropzone.trigger($.Event('drop', {
           originalEvent: {
             dataTransfer: {
@@ -85,7 +85,7 @@
       return it("don't accpet jpeg", function() {
         var callback, data;
         callback = jasmine.createSpy('callback');
-        filedrop.on('fileDropfail', callback);
+        filedrop.on('dropfail', callback);
         data = {
           originalEvent: {
             dataTransfer: {

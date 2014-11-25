@@ -1,22 +1,22 @@
 .simple-filedrop.hover .filedrop-dropzone {
-  border: 3px solid #9b9b9b;
+  border: 6px solid #74b9ef;
 }
 .simple-filedrop .filedrop-dropzone {
   position: absolute;
-  border: 3px dashed #9b9b9b;
-  border-radius: 10px;
-  margin: 10px;
+  border: 6px dotted #a8d3f4;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
-  background: white;
+  background: #ffffff;
 }
 .simple-filedrop .filedrop-dropzone .filedrop-hints {
   position: absolute;
   width: 100%;
-  bottom: 50%;
+  top: 50%;
   text-align: center;
-  font-size: 200%;
-  color: gray;
+  font-size: 20px;
+  line-height: 20px;
+  margin: -10px 0 0 0;
+  color: #999999;
 }

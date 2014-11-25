@@ -51,9 +51,9 @@
                 var el = $(el);
                 simple.filedrop({
                     el: el,
-                    types: ['image/png', 'image/jpeg', 'image/gif'],
+                    //types: ['image/png', 'image/jpeg', 'image/gif'],
                     hints: hints
-                }).on("fileDrop", function(e, files){
+                }).on("drop", function(e, files){
                     console.log("drop", e);
                     var text = "";
                     for (var i = files.length - 1; i >= 0; i--) {
