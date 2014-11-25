@@ -46,21 +46,21 @@ describe 'Simple filedrop', ->
 
   describe 'events', ->
     it 'fileDropShown', ->
-      filedrop.on 'fileDropShown', callback = jasmine.createSpy 'callback'
+      filedrop.on 'dropzoneshow', callback = jasmine.createSpy 'callback'
       $ document
         .trigger $.Event 'dragenter.filedrop'
       expect callback
         .toHaveBeenCalled()
 
     it 'fileDropHidden', ->
-      filedrop.on 'fileDropHidden', callback = jasmine.createSpy 'callback'
+      filedrop.on 'dropzonehide', callback = jasmine.createSpy 'callback'
       $ document
         .trigger $.Event 'dragleave.filedrop'
       expect callback
         .toHaveBeenCalled()
 
     it 'fileDrop', -> 
-      filedrop.on 'fileDrop', callback = jasmine.createSpy 'callback'
+      filedrop.on 'drop', callback = jasmine.createSpy 'callback'
       filedrop.dropzone
         .trigger $.Event 'drop', originalEvent: dataTransfer: files: []
       expect callback
@@ -77,7 +77,7 @@ describe 'Simple filedrop', ->
 
     it "don't accpet jpeg", ->
       callback = jasmine.createSpy 'callback'
-      filedrop.on 'fileDropfail', callback
+      filedrop.on 'dropfail', callback
       data = originalEvent: dataTransfer: files: [{name: "An jpg image", type: "image/jpeg"}]
       filedrop.dropzone.trigger $.Event 'drop', data
       expect callback

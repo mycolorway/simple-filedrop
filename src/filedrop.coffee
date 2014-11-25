@@ -12,11 +12,13 @@ class Filedrop extends SimpleModule
 
   opts:
     el: null
-    types: []
+    types: null
     hints: "Drop file here"
 
   _init: ->
     @el = $ @opts.el
+    throw new Error 'simple-filedrop: el option is invalid' if @el.length == 0
+
     @el.data 'filedrop', @
 
     @dropzone = $ @_dropzoneTpl
@@ -24,6 +26,7 @@ class Filedrop extends SimpleModule
       .html @opts.hints
       .end()
       .hide()
+      .data 'filedrop', @
       .appendTo document.body
 
     $ document
@@ -36,11 +39,11 @@ class Filedrop extends SimpleModule
       .on 'dragenter.filedrop', (e) =>
         if (@_entered += 1) == 1
           @showDropzone() 
-          @trigger("fileDropShown", e)
+          @trigger("dropzoneshow")
       .on 'dragleave.filedrop', (e) =>
         if (@_entered -= 1) <= 0
           @hideDropzone()
-          @trigger("fileDropHidden", e)
+          @trigger("dropzonehide")
 
     @dropzone.on "dragover", (e) =>
       # From Dropzone.js
@@ -54,27 +57,27 @@ class Filedrop extends SimpleModule
     .on "drop", (e) =>
       files = []
       for file in e.originalEvent.dataTransfer.files
-        unless @opts.types.indexOf(file.type) > -1
-          @trigger("fileDropfail", [file, "Wrong types!"])
+        if @opts.types and $.isArray(@opts.types) and @opts.types.indexOf(file.type) < 0
+          @trigger("dropfail", [file, "Wrong types!"])
           @hideDropzone()
           return false
         files.push file
-      @trigger "fileDrop", [files, e]
+      @trigger "drop", [files]
       @hideDropzone()
       false
 
   showDropzone: ->
     @dropzone
       .removeClass 'hover'
+      .show()
       .css
         zIndex: 9,
         position: 'absolute',
         top: (elOffset = @el.offset()).top,
         left: elOffset.left,
-        width: @el.innerWidth(),
-        height: @el.innerHeight(),
+        width: @el.outerWidth(),
+        height: @el.outerHeight(),
         opacity: 0.8
-      .show()
 
   hideDropzone: ->
     @dropzone.hide()
