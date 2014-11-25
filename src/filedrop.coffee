@@ -67,6 +67,8 @@ class Filedrop extends SimpleModule
       false
 
   showDropzone: ->
+    return unless @el.is(':visible')
+
     @dropzone
       .removeClass 'hover'
       .show()
