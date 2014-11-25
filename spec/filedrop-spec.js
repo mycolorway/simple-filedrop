@@ -23,11 +23,11 @@
       });
       it('remove .filedrop events which had been binded with document', function() {
         var callback;
-        $(document).on('dragenter.filedrop', callback = jasmine.createSpy('callback')).trigger($.Event('dragenter.filedrop'));
+        $(document).on("dragenter.filedrop-" + filedrop.id, callback = jasmine.createSpy('callback')).trigger($.Event("dragenter.filedrop-" + filedrop.id));
         expect(callback).toHaveBeenCalled();
-        $(document).on('dragenter.filedrop', callback = jasmine.createSpy('callback'));
+        $(document).on("dragenter.filedrop-" + filedrop.id, callback = jasmine.createSpy('callback'));
         filedrop.destroy();
-        $(document).trigger($.Event('dragenter.filedrop'));
+        $(document).trigger($.Event("dragenter.filedrop-" + filedrop.id));
         return expect(callback).not.toHaveBeenCalled();
       });
       return it('remove the dropzone el', function() {
@@ -40,13 +40,13 @@
       it('fileDropShown', function() {
         var callback;
         filedrop.on('dropzoneshow', callback = jasmine.createSpy('callback'));
-        $(document).trigger($.Event('dragenter.filedrop'));
+        $(document).trigger($.Event("dragenter.filedrop-" + filedrop.id));
         return expect(callback).toHaveBeenCalled();
       });
       it('fileDropHidden', function() {
         var callback;
         filedrop.on('dropzonehide', callback = jasmine.createSpy('callback'));
-        $(document).trigger($.Event('dragleave.filedrop'));
+        $(document).trigger($.Event("dragleave.filedrop-" + filedrop.id));
         return expect(callback).toHaveBeenCalled();
       });
       return it('fileDrop', function() {

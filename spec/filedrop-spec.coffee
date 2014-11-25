@@ -24,16 +24,16 @@ describe 'Simple filedrop', ->
 
     it 'remove .filedrop events which had been binded with document', ->
       $ document
-        .on 'dragenter.filedrop', callback = jasmine.createSpy 'callback'
-        .trigger $.Event 'dragenter.filedrop'
+        .on "dragenter.filedrop-#{filedrop.id}", callback = jasmine.createSpy 'callback'
+        .trigger $.Event "dragenter.filedrop-#{filedrop.id}"
       expect callback
         .toHaveBeenCalled()
 
       $ document
-        .on 'dragenter.filedrop', callback = jasmine.createSpy 'callback'
+        .on "dragenter.filedrop-#{filedrop.id}", callback = jasmine.createSpy 'callback'
       filedrop.destroy()
       $ document
-        .trigger $.Event 'dragenter.filedrop'
+        .trigger $.Event "dragenter.filedrop-#{filedrop.id}"
       expect callback
         .not.toHaveBeenCalled()
 
@@ -48,14 +48,14 @@ describe 'Simple filedrop', ->
     it 'fileDropShown', ->
       filedrop.on 'dropzoneshow', callback = jasmine.createSpy 'callback'
       $ document
-        .trigger $.Event 'dragenter.filedrop'
+        .trigger $.Event "dragenter.filedrop-#{filedrop.id}"
       expect callback
         .toHaveBeenCalled()
 
     it 'fileDropHidden', ->
       filedrop.on 'dropzonehide', callback = jasmine.createSpy 'callback'
       $ document
-        .trigger $.Event 'dragleave.filedrop'
+        .trigger $.Event "dragleave.filedrop-#{filedrop.id}"
       expect callback
         .toHaveBeenCalled()
 
