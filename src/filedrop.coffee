@@ -1,6 +1,8 @@
 
 class Filedrop extends SimpleModule
 
+  @count: 0
+
   _entered: 0
   _dropzoneTpl: """
     <div class="simple-filedrop">
@@ -19,6 +21,7 @@ class Filedrop extends SimpleModule
     @el = $ @opts.el
     throw new Error 'simple-filedrop: el option is invalid' if @el.length == 0
 
+    @id = ++ @constructor.count
     @el.data 'filedrop', @
 
     @dropzone = $ @_dropzoneTpl
@@ -30,17 +33,17 @@ class Filedrop extends SimpleModule
       .appendTo document.body
 
     $ document
-      .on "dragover.filedrop", (e) =>
+      .on "dragover.filedrop-#{@id}", (e) =>
         e.originalEvent.dataTransfer.dropEffect = "none"
         @dropzone.removeClass 'hover' if @dropzone.hasClass 'hover'
         false
-      .on 'drop.filedrop', (e) ->
+      .on "drop.filedrop-#{@id}", (e) ->
         e.preventDefault()
-      .on 'dragenter.filedrop', (e) =>
+      .on "dragenter.filedrop-#{@id}", (e) =>
         if (@_entered += 1) == 1
           @showDropzone() 
           @trigger("dropzoneshow")
-      .on 'dragleave.filedrop', (e) =>
+      .on "dragleave.filedrop-#{@id}", (e) =>
         if (@_entered -= 1) <= 0
           @hideDropzone()
           @trigger("dropzonehide")
@@ -92,7 +95,7 @@ class Filedrop extends SimpleModule
 
   destroy: ->
     @el.removeData 'filedrop'
-    $(document).off '.filedrop'
+    $(document).off ".filedrop-#{@id}"
     @dropzone.remove()
 
 filedrop = (opts) ->
