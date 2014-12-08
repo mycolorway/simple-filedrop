@@ -17,6 +17,8 @@ class Filedrop extends SimpleModule
     types: null
     hints: "Drop file here"
 
+  disabled: false
+
   _init: ->
     @el = $ @opts.el
     throw new Error 'simple-filedrop: el option is invalid' if @el.length == 0
@@ -40,10 +42,12 @@ class Filedrop extends SimpleModule
       .on "drop.filedrop-#{@id}", (e) ->
         e.preventDefault()
       .on "dragenter.filedrop-#{@id}", (e) =>
+        return if @disabled
         if (@_entered += 1) == 1
           @showDropzone() 
           @trigger("dropzoneshow")
       .on "dragleave.filedrop-#{@id}", (e) =>
+        return if @disabled
         if (@_entered -= 1) <= 0
           @hideDropzone()
           @trigger("dropzonehide")
@@ -58,6 +62,7 @@ class Filedrop extends SimpleModule
       @dropzone.addClass "hover" unless @dropzone.hasClass 'hover'
       false
     .on "drop", (e) =>
+      return if @disabled
       files = []
       for file in e.originalEvent.dataTransfer.files
         if @opts.types and $.isArray(@opts.types) and @opts.types.indexOf(file.type) < 0
@@ -92,6 +97,14 @@ class Filedrop extends SimpleModule
     $('.simple-filedrop').each () ->
       filedrop = $(@).data('filedrop')
       filedrop.hideDropzone() if filedrop
+
+  disable: ->
+    @disabled = true
+    @trigger "disabled"
+
+  enable: ->
+    @disabled = false
+    @trigger "enabled"
 
   destroy: ->
     @el.removeData 'filedrop'
